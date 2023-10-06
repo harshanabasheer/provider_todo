@@ -39,7 +39,7 @@ class _TodoListState extends State<TodoList> {
                 Container(
                   decoration: BoxDecoration(
                     color: Colors.black87,
-                    borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                    borderRadius: BorderRadius.all(Radius.circular(20.0))),
                   height: 150,
                   width: double.infinity,
                   margin: const EdgeInsets.all(20),
