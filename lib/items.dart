@@ -3,19 +3,17 @@ import 'package:provider/provider.dart';
 import 'package:provider_todo/provider/provider_page.dart';
 
 class ItemsPage extends StatefulWidget {
-  const ItemsPage({super.key});
+  ItemsPage({required this.index, super.key});
+  int index;
 
   @override
   State<ItemsPage> createState() => _ItemsPageState();
 }
 
 class _ItemsPageState extends State<ItemsPage> {
-
-
   @override
   Widget build(BuildContext context) {
-    final object=Provider.of<Provider_class>(context);
-    List name=object.itemsList;
+    final object = Provider.of<Provider_class>(context);
 
     return Scaffold(
       floatingActionButton: FloatingActionButton(
@@ -42,7 +40,7 @@ class _ItemsPageState extends State<ItemsPage> {
                     const SizedBox(height: 10.0),
                     ElevatedButton(
                       onPressed: () {
-                        object.addItem();
+                        object.addList(widget.index);
                         Navigator.of(context).pop();
                       },
                       style: ElevatedButton.styleFrom(
@@ -55,35 +53,38 @@ class _ItemsPageState extends State<ItemsPage> {
                     ),
                   ],
                 ),
-
               );
-
             },
           );
         },
-        child:const Icon(Icons.add,color: Colors.white,) ,
+        child: const Icon(Icons.add, color: Colors.white),
       ),
-      appBar: AppBar(title: const Text("List",style: TextStyle(fontWeight: FontWeight.bold)),
-        backgroundColor: Colors.black45,),
-      body:
-      ListView.builder(
-          itemCount: name.length,
-          itemBuilder: (BuildContext context, int index) {
-            return Card(
-              child: ListTile(
-                title: Text(name[index],style: const TextStyle(fontWeight: FontWeight.bold)),
-                trailing: Checkbox(
-                  checkColor: Colors.white,
-                  activeColor: Colors.blue,
-                  value: object.icn_change(name[index]),
-                  onChanged: (bool ? value){
-                    object.updateItemList(name[index]);
-                  },
+      appBar: AppBar(
+        title: const Text("List", style: TextStyle(fontWeight: FontWeight.bold)),
+        backgroundColor: Colors.black45,
+      ),
+      body: ListView.builder(
+        itemCount: object.category[widget.index]["task"].length,
+        itemBuilder: (BuildContext context, int index) {
+          String itemText = object.category[widget.index]["task"][index];
+          bool isChecked = object.itemChecked[index];
 
-                )
+          return Card(
+            child: ListTile(
+              title: Text(
+                itemText,
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
-            );
-          }),
+              trailing: Checkbox(
+                value: isChecked,
+                onChanged: (newValue) {
+                  object.toggleItemChecked(index);
+                },
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 }

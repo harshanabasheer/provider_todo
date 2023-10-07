@@ -16,20 +16,22 @@ class _TodoListState extends State<TodoList> {
   @override
   Widget build(BuildContext context) {
     final object=Provider.of<Provider_class>(context);
-    List name=object.items;
-    List icon=object.itemsIcon;
+    int checkedItemCount = object.countCheckedItems();
+    int uncheckedItemCount = object.countUncheckedItems();
+/*late  int checkedItemCount;
+late int uncheckedItemCount;
 
-    return Scaffold(
+  */  return Scaffold(
 
       appBar: AppBar(title: Row(
         children: [
           CircleAvatar(
             backgroundImage: AssetImage('images/robert.jpeg'), radius: 30,),
-          SizedBox(width: 10,),
-          Text("ToDo-Wishflow",style: TextStyle(fontWeight: FontWeight.bold)),
+            SizedBox(width: 10,),
+            Text("ToDo-Wishflow",style: TextStyle(fontWeight: FontWeight.bold)),
         ],
       ),
-        backgroundColor: Colors.white,),
+      backgroundColor: Colors.white,),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -38,8 +40,8 @@ class _TodoListState extends State<TodoList> {
               children: [
                 Container(
                   decoration: BoxDecoration(
-                    color: Colors.black87,
-                    borderRadius: BorderRadius.all(Radius.circular(20.0))),
+                  color: Colors.black87,
+                  borderRadius: BorderRadius.all(Radius.circular(20.0))),
                   height: 150,
                   width: double.infinity,
                   margin: const EdgeInsets.all(20),
@@ -93,16 +95,18 @@ class _TodoListState extends State<TodoList> {
             ),
             Expanded(
               child: GridView.builder(
-                itemCount: name.length,
+                itemCount: object.category.length,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   crossAxisSpacing: 15.0,
                   mainAxisSpacing: 15.0,
                 ),
                 itemBuilder: (BuildContext context, int index) {
-                  return GestureDetector(
+                /*  checkedItemCount=object.countCheckedItemsForGridItem(index);
+                  uncheckedItemCount=object.countCheckedItemsForGridItem(index);
+                */  return GestureDetector(
                     onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => ItemsPage()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => ItemsPage(index: index,)));
                     },
 
                     child: Card(
@@ -112,9 +116,9 @@ class _TodoListState extends State<TodoList> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(icon[index], style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
+                          Text(object.category[index]["name"], style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
                           SizedBox(height: 25),
-                          Text(name[index], style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+                          Text(object.category[index]["icon"], style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
                           ),
                           SizedBox(height: 20),
                           Row(
@@ -128,7 +132,7 @@ class _TodoListState extends State<TodoList> {
                                   shape: RoundedRectangleBorder( //to set border radius to button
                                       borderRadius: BorderRadius.circular(30)
                                   ),),
-                                child: Text("2 Left",style: TextStyle(color: Colors.white),),
+                                child: Text("${uncheckedItemCount.toString()} left",style: TextStyle(color: Colors.white),),
                               ),
                               ElevatedButton(
                                 onPressed: () {},
@@ -138,7 +142,7 @@ class _TodoListState extends State<TodoList> {
                                   shape: RoundedRectangleBorder( //to set border radius to button
                                       borderRadius: BorderRadius.circular(30)
                                   ),),
-                                child: const Text("5 done",style: TextStyle(color: Colors.black),),
+                                child:  Text("$checkedItemCount done",style: TextStyle(color: Colors.black),),
                               ),
                             ],
                           )
